@@ -1,12 +1,9 @@
 % Orthogonal projection on a curve for a given point
 %
 % Function signature: returns the parameter t
-%
-% Name: Aniket Pandey
-% Roll: 160113
 
 function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
-    a = 0.001;
+    a = eps/5;		% This needs to be checked for a possible optimisation
     % f(t) = (distance)^2
     dist = @(t) (X(t) - x0)^2 + (Y(t) - y0)^2;
 
@@ -34,7 +31,7 @@ function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
     % iterations is a
     count = 0;
 
-    while ( a*abs(grad_f(t0)) > 0.0001 && count < 50)
+    while ( abs(grad_f(t0)) > dist(eps) && count < 50)
         t0 = t0 - a*grad_f(t0);
         count = count + 1;
     end
