@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage,amsfonts,mathpazo, mathtools, pgfplots}
+
+\title{MTH308B Mini Project 1}
+\author{Aniket Pandey}
+\date{Roll No: 160113}
+\pagestyle{empty}
+\begin{document}
+
+\maketitle
+
+\section*{Problem Statement}
+Given a parametric curve $C$ in $\mathbb{R}^2$ given by $C:[0, 1] \rightarrow \mathbb{R}^2$, such that
+    \begin{equation}
+        C(t) = (X(t), Y(t)), 0 \leq t \leq 1
+    \end{equation}
+and a point $(x_0,y_0)$, we need to find the orthogonal projection of this point on the curve. \\
+The orthogonal projection from $(x_0,y_0)$ on $C(t)$ will be the point on the curve closest to it.
+
+\section*{Proposed Algorithm}
+The method used for the purpose of numerically solving this problem is a variant of the \textbf{Steepest Descent algorithm}. \\
+The following steps describe the algorithm used -
+\begin{enumerate}
+    \item Since the period of the given curve is 1, 
+    \begin{equation}
+        f(t+1) = f(t)
+    \end{equation}
+    The distance squared function is given by -
+    \begin{equation}
+        f(t) = (X(t) - x_0)^2 + (Y(t) - y_0)^2
+    \end{equation}
+    A period of 1 implies that the possible values of $t$ lie in the range $[0,1]$. After this range, the behavior of the function will repeat. \\
+	Considering various possibilities in \textit{epsValue}, the curve is divided into 200 sections and hence, the values of $t$ are iterated from 0.0 to 0.995 with a step value of 0.005.
+    
+    \item
+    By gradient descent algorithm, the value of the parameter $t$ at $(n+1)^{th}$ iteration is given by
+    \begin{equation}
+        t_{n+1} = t_n - k\nabla f(t_n)
+    \end{equation}
+    The above equation is dependent on k. An ideal value of k will be the one which minimizes the given parametric function
+    \begin{equation}
+        f(t_{n+1}) = f(t_n - k\nabla f(t))
+    \end{equation}
+    $\Rightarrow$ k satisfies the following equation
+    \begin{equation}
+        \nabla f(t_{n+1}) . \nabla f(t_n) = 0
+    \end{equation} 
+    Ideally in this case, we need to find the roots of the problem using a numerical method. \\
+    One approach for doing so will be to use Matlab's symbolic toolbox. However, this computation will add up to the total runtime. \\
+    Another approach for this will be to use a numerical method to solve for the roots. However, this will reduce the probability that the convergence criterion is met and the solution may diverge.
+    
+    \item 
+    It should be noted that we initially computed the value of $t$ which gives a minimum value of distance function. Post which we need to use \textit{Newton-Raphson} (secant) method for bringing $t_0$ within the desired accuracy. The $\epsilon$ is defined as:
+    
+    \begin{equation}
+        cos(f(t)) (eps) =
+        \frac{[X(t_c) - X_0, Y(t_c) - Y_0] \cdot [X'(t_c), Y'(t_c)]}{\left\lVert [X(t_c) - X_0, Y(t_c) - Y_0]\right\rVert_2 \left\lVert [X'(t_c), Y'(t_c)]\right\rVert_2}
+    \end{equation}
+    
+	\item
+	  Suppose the root of the problem is such that initial guess $(X_t, Y_t)$ makes an \textit{obtuse} angle with $(X_c - X_t, Y_c - Y_t)$. In this case the gradient of the curve is negative at $t$. 
+    \begin{equation}
+        \epsilon > 0 
+        \Rightarrow (\epsilon/2)\cos(f(t)) < 0
+    \end{equation}
+    
+    Therefore, in the $n^{th}$ iteration, the computed value of $t_{n+1}$ increases (i.e. more than the previous value $t_n$, converging towards the solution.
+    
+    \begin{equation}
+        \nabla t_n  = t_{n+1} - t_n \approx (\epsilon/2)\cos(f(t))
+    \end{equation}
+    
+    Without loss of generality, the same can be proven for the case when the solution lies to the right of our initial guess. The computed value of $t_{n+1}$ will move towards right again converging towards the solution.
+    Hence, we make progress converging towards the solution at each iteration.
+    
+        
+    \item 
+    Since the problem statement does not emphasize of maximizing the efficiency. We can relax the restriction on the number of Newton-Raphson iterations. However, to avoid an infinite loop in case of a malicious input or a badly conditioned function, we limit the maximum number of iterations to \textbf{5000}.
+    
+\end{enumerate}
+
+\end{document}
