@@ -19,7 +19,7 @@ and a point $(x_0,y_0)$, we need to find the orthogonal projection of this point
 The orthogonal projection from $(x_0,y_0)$ on $C(t)$ will be the point on the curve closest to it.
 
 \section*{Proposed Algorithm}
-The method used for the purpose of numerically solving this problem is a variant of the \textbf{Steepest Descent algorithm}. \\
+The method used for the purpose of numerically solving this problem is a variant of the \textbf{Steepest Descent algorithm} and \textbf{Newton-Raphson} (secant) method. \\
 The following steps describe the algorithm used -
 \begin{enumerate}
     \item Since the period of the given curve is 1, 
@@ -59,10 +59,12 @@ The following steps describe the algorithm used -
     \end{equation}
     
 	\item
-	  Suppose the root of the problem is such that initial guess $(X_t, Y_t)$ makes an \textit{obtuse} angle with $(X_c - X_t, Y_c - Y_t)$. In this case the gradient of the curve is negative at $t$. 
+	  Suppose the root of the problem is such that initial guess $(X_t, Y_t)$ makes an \textit{obtuse} angle with $(X_c - X_t, Y_c - Y_t)$. In this case the gradient of the curve is negative at $t$.
+	  
+	 Let $a = 0.0001$ be arbitrarily chosen. We use $a - \epsilon$ as the variable step for our Steepest descent method. Now,
     \begin{equation}
-        \epsilon > 0 
-        \Rightarrow (\epsilon/2)\cos(f(t)) < 0
+        |a - \epsilon| > 0 
+        \Rightarrow |a - \epsilon|\cos(f(t)) < 0
     \end{equation}
     
     Therefore, in the $n^{th}$ iteration, the computed value of $t_{n+1}$ increases (i.e. more than the previous value $t_n$, converging towards the solution.

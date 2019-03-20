@@ -6,7 +6,8 @@
 % Roll: 160113
 
 function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
-    DEBUG = false;
+    a = 0.0001;
+    DEBUG = true;
 
     % f(t) = (distance)^2 (to be minimised)
     dist = @(t) (X(t) - x0)^2 + (Y(t) - y0)^2;
@@ -38,7 +39,7 @@ function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
     % a badly conditioned function, we restrict the number of iterations to 5000.
     count = 0;
     while (abs(cosine(t0)) > eps && count < 5000)
-        t0 = t0 - (eps/2)*cosine(t0);
+        t0 = t0 - abs(a - eps)*cosine(t0);
         count = count + 1;
     end
 
@@ -47,4 +48,3 @@ function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
             cosine(t0), eps, count, dist(t0));
     end
 end
-
