@@ -1,8 +1,11 @@
 \documentclass[12pt]{article}
+
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage,amsfonts,mathpazo, mathtools, pgfplots}
+\usepackage[bottom, hang, flushmargin]{footmisc}
+\setlength{\footnotesep}{1.5pc}
 
-\title{MTH308B Mini Project 1}
+\title{\vspace{-80pt}MTH-308B Mini Project 1}
 \author{Aniket Pandey}
 \date{Roll No: 160113}
 \pagestyle{empty}
@@ -46,8 +49,11 @@ The following steps describe the algorithm used -
     \begin{equation}
         \nabla f(t_{n+1}) . \nabla f(t_n) = 0
     \end{equation} 
-    Ideally in this case, we need to find the roots of the problem using a numerical method. \\
-    One approach for doing so will be to use Matlab's symbolic toolbox. However, this computation will add up to the total runtime. \\
+    
+    \item Ideally in this case, we need to find the roots of the problem using a numerical method.
+    
+    One approach for doing so will be to use Matlab's symbolic toolbox. However, this computation will add up to the total runtime.
+    
     Another approach for this will be to use a numerical method to solve for the roots. However, this will reduce the probability that the convergence criterion is met and the solution may diverge.
     
     \item 
@@ -61,7 +67,7 @@ The following steps describe the algorithm used -
 	\item
 	  Suppose the root of the problem is such that initial guess $(X_t, Y_t)$ makes an \textit{obtuse} angle with $(X_c - X_t, Y_c - Y_t)$. In this case the gradient of the curve is negative at $t$.
 	  
-	 Let $a = 0.0001$ be arbitrarily chosen. We use $a - \epsilon$ as the variable step for our Steepest descent method. Now,
+	 Let $a = 0.001$ be arbitrarily chosen. We use $a - \epsilon$ as the variable step for our Steepest descent method. Now,
     \begin{equation}
         |a - \epsilon| > 0 
         \Rightarrow |a - \epsilon|\cos(f(t)) < 0
@@ -70,16 +76,13 @@ The following steps describe the algorithm used -
     Therefore, in the $n^{th}$ iteration, the computed value of $t_{n+1}$ increases (i.e. more than the previous value $t_n$, converging towards the solution.
     
     \begin{equation}
-        \nabla t_n  = t_{n+1} - t_n \approx (\epsilon/2)\cos(f(t))
+        \nabla t_n  = t_{n+1} - t_{n} \approx - (\epsilon/2)\cos(f(t)) > 0
     \end{equation}
     
-    Without loss of generality, the same can be proven for the case when the solution lies to the right of our initial guess. The computed value of $t_{n+1}$ will move towards right again converging towards the solution.
-    Hence, we make progress converging towards the solution at each iteration.
+    Without loss of generality, the same can be proven for the case when the solution lies to the right of our initial guess. The computed value of $t_{n+1}$ will move towards left again, converging towards the solution.
     
-        
-    \item 
-    Since the problem statement does not emphasize of maximizing the efficiency. We can relax the restriction on the number of Newton-Raphson iterations. However, to avoid an infinite loop in case of a malicious input or a badly conditioned function, we limit the maximum number of iterations to \textbf{5000}.
-    
+    Hence, we make a gradual progress converging towards the solution at each iteration.
+    \item Since the problem statement does not emphasize of maximizing the efficiency. We can relax the restriction on the number of Newton-Raphson iterations. However, to avoid an infinite loop in case of a malicious input or a badly conditioned function, we limit the maximum number of iterations to \textbf{100000}\footnote{The \textit{step} value in NR is so chosen as to heavily-optimize the algorithm for the case when $\epsilon \approx 10^{-14}$, hinted as a possible value for $\epsilon$ by Prof. Akash Anand. Hence, it is reasonable for the algorithm to not be efficient for relatively larger values of $\epsilon$. Thus to circumvent the worst case possibility, iteration limit was chosen to be a very large number, i.e 100000 instead of say, 5000.}.
 \end{enumerate}
 
 \end{document}

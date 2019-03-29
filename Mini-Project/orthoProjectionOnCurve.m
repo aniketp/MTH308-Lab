@@ -6,8 +6,8 @@
 % Roll: 160113
 
 function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
-    a = 0.0001;
-    DEBUG = true;
+    step = 0.001;
+    DEBUG = false;
 
     % f(t) = (distance)^2 (to be minimised)
     dist = @(t) (X(t) - x0)^2 + (Y(t) - y0)^2;
@@ -25,6 +25,7 @@ function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
             d_min = d_cur;
         end
     end
+
     if DEBUG
         fprintf("DEBUG: Min Distance of all sections is: %f\n", d_min);
     end
@@ -36,15 +37,15 @@ function t0 = orthoProjectionOnCurve(x0, y0, X, Y, dXdt, dYdt, eps)
     % Core of the modified Steepest Descent Algorithm and Newton-Raphson method
     % Stop when the absolute value of cosine is contained within the provided
     % error (epsilon). To avoid an infinite loop in case of a malicious input or
-    % a badly conditioned function, we restrict the number of iterations to 5000.
+    % a badly conditioned function, we restrict the number of iterations to 100000.
     count = 0;
-    while (abs(cosine(t0)) > eps && count < 5000)
-        t0 = t0 - abs(a - eps)*cosine(t0);
+    while (abs(cosine(t0)) > eps && count < 100000)
+        t0 = t0 - abs(step - eps) * cosine(t0);
         count = count + 1;
     end
 
     if DEBUG
-        fprintf("DEBUG:\n\tcosine: %i\n\teps: %i\n\tcount: %i\n\tdist: %i\n\n",...
-            cosine(t0), eps, count, dist(t0));
+        fprintf("DEBUG:\n\tcosine: %i\n\teps: %i\n\tcount: %i\n\tt0: %i\n\n",...
+            cosine(t0), eps, count, t0);
     end
 end
