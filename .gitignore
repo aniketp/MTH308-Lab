@@ -1,4 +1,4 @@
-report.pdf
+*.out
 *.aux
 *.bbl
 *.blg
